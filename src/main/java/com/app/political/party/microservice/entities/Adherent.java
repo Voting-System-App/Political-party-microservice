@@ -1,5 +1,6 @@
 package com.app.political.party.microservice.entities;
 
+import jakarta.persistence.ManyToOne;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -18,4 +19,6 @@ public class Adherent {
     @Field(name = "last_name")
     private String lastName;
     private Boolean status;
+    @ManyToOne
+    private PoliticalParty politicalParty;
 }
