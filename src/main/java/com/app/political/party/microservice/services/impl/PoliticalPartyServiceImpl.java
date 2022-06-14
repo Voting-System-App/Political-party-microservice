@@ -15,7 +15,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PoliticalPartyServiceImpl implements PoliticalPartyService {
@@ -34,7 +33,6 @@ public class PoliticalPartyServiceImpl implements PoliticalPartyService {
     public Flux<PoliticalParty> findAll() {
         return partyRepository.findAll();
     }
-
     @Override
     public Mono<PoliticalParty> findById(String id) {
         return partyRepository.findById(id);
@@ -63,7 +61,8 @@ public class PoliticalPartyServiceImpl implements PoliticalPartyService {
 
     @Override
     public Mono<PoliticalParty> update(PoliticalParty politicalParty, String id,String path) {
-        return partyRepository.findById(id).flatMap(result->{
+        Flux<Adherent> adherentFlux = adherentRepository.findByPoliticalParty_Id(id);
+        Mono<PoliticalParty> response = partyRepository.findById(id).flatMap(result->{
             result.setDescription(politicalParty.getDescription());
             result.setDate(politicalParty.getDate());
             try {
@@ -72,5 +71,6 @@ public class PoliticalPartyServiceImpl implements PoliticalPartyService {
                 return Mono.error(new RuntimeException(e));
             }
         });
+        return adherentFlux.hasElements().flatMap(result->result?adherentRepository.deleteAllByPoliticalParty_Id(id).then(response):response);
     }
 }

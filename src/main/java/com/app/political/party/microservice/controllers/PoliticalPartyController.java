@@ -37,8 +37,7 @@ public class PoliticalPartyController {
     public Mono<ResponseEntity<PoliticalParty>> findById(@PathVariable String id){
         return partyService.findById(id).map(ResponseEntity::ok).defaultIfEmpty(ResponseEntity.notFound().build());
     }
-
-    @PostMapping("/saveFile")
+    @PostMapping("/save/adherent/list")
     public Mono<String> saveAdherentFile(@RequestPart FilePart file) {
         String tempPath = UUID.randomUUID() + "-" + file.filename()
                 .replace(" ","")
@@ -52,7 +51,7 @@ public class PoliticalPartyController {
         return ResponseEntity.ok(partyService.save(party));
     }
 
-    @PutMapping("/addAdherent/{id}/file/path/{path}")
+    @PutMapping("/{id}/file/path/{path}")
     public Mono<ResponseEntity<PoliticalParty>> update(@RequestBody PoliticalParty party,@PathVariable String id,@PathVariable String path){
         return partyService.update(party,id,path).map(ResponseEntity::ok).defaultIfEmpty(ResponseEntity.notFound().build());
     }
