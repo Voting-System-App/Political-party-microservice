@@ -1,4 +1,4 @@
-package com.app.political.party.microservice.config;
+package com.app.political.party.microservice.controllers;
 
 import com.app.political.party.microservice.entities.PoliticalParty;
 import com.app.political.party.microservice.services.PoliticalPartyService;
@@ -52,7 +52,7 @@ public class PoliticalPartyController {
         return ResponseEntity.ok(partyService.save(party));
     }
 
-    @PutMapping("/{id}/file/path/{path}")
+    @PutMapping("/addAdherent/{id}/file/path/{path}")
     public Mono<ResponseEntity<PoliticalParty>> update(@RequestBody PoliticalParty party,@PathVariable String id,@PathVariable String path){
         return partyService.update(party,id,path).map(ResponseEntity::ok).defaultIfEmpty(ResponseEntity.notFound().build());
     }
