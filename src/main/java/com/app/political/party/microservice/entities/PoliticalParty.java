@@ -19,6 +19,4 @@ public class PoliticalParty {
     @NotEmpty
     private String date;
     private Boolean status;
-    @OneToMany(mappedBy = "politicalParty",cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Adherent> adherents;
 }
