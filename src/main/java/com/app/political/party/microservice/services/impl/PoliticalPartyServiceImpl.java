@@ -7,6 +7,7 @@ import com.app.political.party.microservice.repositories.PoliticalPartyRepositor
 import com.app.political.party.microservice.services.PoliticalPartyService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -30,10 +31,12 @@ public class PoliticalPartyServiceImpl implements PoliticalPartyService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Flux<PoliticalParty> findAll() {
         return partyRepository.findAll();
     }
     @Override
+    @Transactional(readOnly = true)
     public Mono<PoliticalParty> findById(String id) {
         return partyRepository.findById(id);
     }
@@ -56,12 +59,14 @@ public class PoliticalPartyServiceImpl implements PoliticalPartyService {
         return adherentRepository.saveAll(adherentList).then(Mono.just(status));
     }
     @Override
+    @Transactional
     public Mono<PoliticalParty> save(PoliticalParty politicalParty){
         politicalParty.setStatus(false);
         return partyRepository.save(politicalParty);
     }
 
     @Override
+    @Transactional
     public Mono<PoliticalParty> update(PoliticalParty politicalParty, String id,String path) {
         Flux<Adherent> adherentFlux = adherentRepository.findByPoliticalParty_Id(id);
         Mono<PoliticalParty> response = partyRepository.findById(id).flatMap(result->{

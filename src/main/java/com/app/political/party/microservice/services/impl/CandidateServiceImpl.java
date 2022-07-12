@@ -25,6 +25,12 @@ public class CandidateServiceImpl implements CandidateService {
 
     @Override
     @Transactional(readOnly = true)
+    public Flux<Candidate> findByPoliticalParty(String id) {
+        return candidateRepository.findByPoliticalParty_Id(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Mono<Candidate> findById(String id) {
         return candidateRepository.findById(id);
     }

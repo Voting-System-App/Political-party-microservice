@@ -6,6 +6,7 @@ import reactor.core.publisher.Mono;
 
 public interface CandidateService {
     Flux<Candidate> findAll();
+    Flux<Candidate> findByPoliticalParty(String id);
     Mono<Candidate> findById(String id);
     Mono<Candidate> save(Candidate candidate);
     Mono<Candidate> update(Candidate candidate,String id);
