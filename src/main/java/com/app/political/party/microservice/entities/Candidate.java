@@ -27,7 +27,7 @@ public class Candidate {
     @Size(min = 8,max =8)
     private String dni;
     private Boolean gender;
-    private Integer age;
+    private String birthDate;
     @ManyToOne
     private PoliticalParty politicalParty;
 }
