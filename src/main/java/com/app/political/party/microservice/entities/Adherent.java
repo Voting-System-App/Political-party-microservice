@@ -1,5 +1,6 @@
 package com.app.political.party.microservice.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
 import org.springframework.data.annotation.Id;

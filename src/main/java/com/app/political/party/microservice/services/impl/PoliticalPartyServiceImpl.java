@@ -38,12 +38,12 @@ public class PoliticalPartyServiceImpl implements PoliticalPartyService {
         return partyRepository.findById(id);
     }
 
-    private Flux<Adherent> saveAdherentFromFile(PoliticalParty party,String path)throws IOException {
+    private Mono<Boolean> saveAdherentFromFile(PoliticalParty party, String path)throws IOException {
         String line = "";
         BufferedReader file = new BufferedReader(new FileReader(tempDirectory+path));
         List<Adherent> adherentList = new ArrayList<>();
         while ((line= file.readLine())!=null){
-            String[] data = line.split(";");
+            String[] data = line.split(";",-1);
             Adherent adherent = new Adherent();
             adherent.setName(data[0]);
             adherent.setLastName(data[1]);
@@ -51,7 +51,9 @@ public class PoliticalPartyServiceImpl implements PoliticalPartyService {
             adherent.setPoliticalParty(party);
             adherentList.add(adherent);
         }
-        return adherentRepository.saveAll(adherentList);
+        Boolean status = adherentList.stream().anyMatch(adherent -> !adherent.getStatus());
+        adherentList.forEach(adherent->adherent.setStatus(status));
+        return adherentRepository.saveAll(adherentList).then(Mono.just(status));
     }
     @Override
     public Mono<PoliticalParty> save(PoliticalParty politicalParty){
@@ -66,7 +68,10 @@ public class PoliticalPartyServiceImpl implements PoliticalPartyService {
             result.setDescription(politicalParty.getDescription());
             result.setDate(politicalParty.getDate());
             try {
-                return saveAdherentFromFile(result,path).then(partyRepository.save(result));
+                return saveAdherentFromFile(result,path).flatMap(status->{
+                            result.setStatus(!status);
+                            return partyRepository.save(result);
+                        });
             } catch (IOException e) {
                 return Mono.error(new RuntimeException(e));
             }
