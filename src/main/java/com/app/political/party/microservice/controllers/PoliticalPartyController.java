@@ -1,5 +1,6 @@
 package com.app.political.party.microservice.controllers;
 
+import com.app.political.party.microservice.entities.Adherent;
 import com.app.political.party.microservice.entities.PoliticalParty;
 import com.app.political.party.microservice.services.PoliticalPartyService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,6 +34,11 @@ public class PoliticalPartyController {
         Flux<PoliticalParty> total = partyService.findAll();
         return ResponseEntity.ok(total);
     }
+    @GetMapping("/adherents/{id}")
+    public ResponseEntity<Flux<Adherent>> findAllAdherents(@PathVariable String id){
+        Flux<Adherent> total = partyService.findAllAdherents(id);
+        return ResponseEntity.ok(total);
+    }
     @GetMapping("/{id}")
     public Mono<ResponseEntity<PoliticalParty>> findById(@PathVariable String id){
         return partyService.findById(id).map(ResponseEntity::ok).defaultIfEmpty(ResponseEntity.notFound().build());
@@ -45,14 +51,20 @@ public class PoliticalPartyController {
                 .replace("\\","");
         return file.transferTo(new File(tempDirectory+tempPath)).thenReturn(tempPath);
     }
-
     @PostMapping
     public ResponseEntity<Mono<PoliticalParty>> save(@RequestBody PoliticalParty party) throws IOException {
         return ResponseEntity.ok(partyService.save(party));
     }
-
+    @PutMapping("/{id}")
+    public Mono<ResponseEntity<PoliticalParty>> update(@RequestBody PoliticalParty party,@PathVariable String id){
+        return partyService.update(party,id).map(ResponseEntity::ok).defaultIfEmpty(ResponseEntity.notFound().build());
+    }
     @PutMapping("/{id}/file/path/{path}")
-    public Mono<ResponseEntity<PoliticalParty>> update(@RequestBody PoliticalParty party,@PathVariable String id,@PathVariable String path){
-        return partyService.update(party,id,path).map(ResponseEntity::ok).defaultIfEmpty(ResponseEntity.notFound().build());
+    public Mono<ResponseEntity<PoliticalParty>> updateAdherentStatus(@PathVariable String id,@PathVariable String path){
+        return partyService.updateAdherentStatus(id,path).map(ResponseEntity::ok).defaultIfEmpty(ResponseEntity.notFound().build());
+    }
+    @DeleteMapping("/{id}")
+    public Mono<ResponseEntity<Void>> delete(@PathVariable String id){
+        return partyService.delete(id).map(ResponseEntity::ok).defaultIfEmpty(ResponseEntity.notFound().build());
     }
 }

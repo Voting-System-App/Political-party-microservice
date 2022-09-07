@@ -8,6 +8,6 @@ import reactor.core.publisher.Mono;
 
 @Repository
 public interface AdherentRepository extends ReactiveMongoRepository<Adherent,String> {
-    Flux<Adherent> findByPoliticalParty_Id(String id);
+    Flux<Adherent> findAllByPoliticalParty_Id(String id);
     Mono<Void> deleteAllByPoliticalParty_Id(String id);
 }

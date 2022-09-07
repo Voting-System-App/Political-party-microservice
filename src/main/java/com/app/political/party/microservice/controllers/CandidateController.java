@@ -8,10 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.UUID;
-
 @RestController
 @Tag(name = "Candidate Api", description = "Api for testing the endpoint for candidate")
 @RequestMapping("/candidate")
@@ -47,7 +43,7 @@ public class CandidateController {
         return candidateService.update(candidate,id).map(ResponseEntity::ok).defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/{id}")
+    @DeleteMapping("/{id}")
     public Mono<ResponseEntity<Void>> delete(@PathVariable String id){
         return candidateService.delete(id).map(ResponseEntity::ok).defaultIfEmpty(ResponseEntity.notFound().build());
     }

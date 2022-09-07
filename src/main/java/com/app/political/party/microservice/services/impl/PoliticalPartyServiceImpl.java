@@ -35,6 +35,12 @@ public class PoliticalPartyServiceImpl implements PoliticalPartyService {
     public Flux<PoliticalParty> findAll() {
         return partyRepository.findAll();
     }
+
+    @Override
+    public Flux<Adherent> findAllAdherents(String id) {
+        return adherentRepository.findAllByPoliticalParty_Id(id);
+    }
+
     @Override
     @Transactional(readOnly = true)
     public Mono<PoliticalParty> findById(String id) {
@@ -66,12 +72,20 @@ public class PoliticalPartyServiceImpl implements PoliticalPartyService {
     }
 
     @Override
-    @Transactional
-    public Mono<PoliticalParty> update(PoliticalParty politicalParty, String id,String path) {
-        Flux<Adherent> adherentFlux = adherentRepository.findByPoliticalParty_Id(id);
-        Mono<PoliticalParty> response = partyRepository.findById(id).flatMap(result->{
+    public Mono<PoliticalParty> update(PoliticalParty politicalParty, String id) {
+        return partyRepository.findById(id).flatMap(result->{
+            result.setName(politicalParty.getName());
             result.setDescription(politicalParty.getDescription());
-            result.setDate(politicalParty.getDate());
+            result.setCreationDate(politicalParty.getCreationDate());
+            return partyRepository.save(result);
+        });
+    }
+
+    @Override
+    @Transactional
+    public Mono<PoliticalParty> updateAdherentStatus(String id,String path) {
+        Flux<Adherent> adherentFlux = adherentRepository.findAllByPoliticalParty_Id(id);
+        Mono<PoliticalParty> response = partyRepository.findById(id).flatMap(result->{
             try {
                 return saveAdherentFromFile(result,path).flatMap(status->{
                             result.setStatus(!status);
@@ -82,5 +96,10 @@ public class PoliticalPartyServiceImpl implements PoliticalPartyService {
             }
         });
         return adherentFlux.hasElements().flatMap(result->result?adherentRepository.deleteAllByPoliticalParty_Id(id).then(response):response);
+    }
+
+    @Override
+    public Mono<Void> delete(String id) {
+        return partyRepository.deleteById(id);
     }
 }
