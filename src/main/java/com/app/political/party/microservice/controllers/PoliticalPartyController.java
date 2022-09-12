@@ -63,6 +63,10 @@ public class PoliticalPartyController {
     public Mono<ResponseEntity<PoliticalParty>> updateAdherentStatus(@PathVariable String id,@PathVariable String path){
         return partyService.updateAdherentStatus(id,path).map(ResponseEntity::ok).defaultIfEmpty(ResponseEntity.notFound().build());
     }
+    @DeleteMapping("/file/path/{path}")
+    public Mono<ResponseEntity<Boolean>> deleteAdherentFile(@PathVariable String path) throws IOException {
+        return partyService.deleteFileAdherent(path).map(ResponseEntity::ok).defaultIfEmpty(ResponseEntity.notFound().build());
+    }
     @DeleteMapping("/{id}")
     public Mono<ResponseEntity<Void>> delete(@PathVariable String id){
         return partyService.delete(id).map(ResponseEntity::ok).defaultIfEmpty(ResponseEntity.notFound().build());

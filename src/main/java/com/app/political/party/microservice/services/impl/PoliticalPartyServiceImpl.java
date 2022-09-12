@@ -14,6 +14,9 @@ import reactor.core.publisher.Mono;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +49,6 @@ public class PoliticalPartyServiceImpl implements PoliticalPartyService {
     public Mono<PoliticalParty> findById(String id) {
         return partyRepository.findById(id);
     }
-
     private Mono<Boolean> saveAdherentFromFile(PoliticalParty party, String path)throws IOException {
         String line = "";
         BufferedReader file = new BufferedReader(new FileReader(tempDirectory+path));
@@ -62,6 +64,7 @@ public class PoliticalPartyServiceImpl implements PoliticalPartyService {
         }
         Boolean status = adherentList.stream().anyMatch(adherent -> !adherent.getStatus());
         adherentList.forEach(adherent->adherent.setStatus(status));
+        file.close();
         return adherentRepository.saveAll(adherentList).then(Mono.just(status));
     }
     @Override
@@ -90,7 +93,7 @@ public class PoliticalPartyServiceImpl implements PoliticalPartyService {
                 return saveAdherentFromFile(result,path).flatMap(status->{
                             result.setStatus(!status);
                             return partyRepository.save(result);
-                        });
+                        }).then().thenReturn(result);
             } catch (IOException e) {
                 return Mono.error(new RuntimeException(e));
             }
@@ -101,5 +104,11 @@ public class PoliticalPartyServiceImpl implements PoliticalPartyService {
     @Override
     public Mono<Void> delete(String id) {
         return partyRepository.deleteById(id);
+    }
+
+    @Override
+    public Mono<Boolean> deleteFileAdherent(String path) throws IOException {
+        Path result = Path.of(tempDirectory+path);
+        return Mono.just(Files.deleteIfExists(result));
     }
 }

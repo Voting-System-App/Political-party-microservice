@@ -38,6 +38,7 @@ public class CandidateServiceImpl implements CandidateService {
     @Override
     @Transactional
     public Mono<Candidate> save(Candidate candidate) {
+        candidate.getPoliticalParty().setStatus(false);
         return candidateRepository.save(candidate);
     }
 
