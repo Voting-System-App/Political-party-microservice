@@ -93,7 +93,7 @@ public class PoliticalPartyServiceImpl implements PoliticalPartyService {
                 return saveAdherentFromFile(result,path).flatMap(status->{
                             result.setStatus(!status);
                             return partyRepository.save(result);
-                        }).then().thenReturn(result);
+                        }).then(deleteFileAdherent(path)).thenReturn(result);
             } catch (IOException e) {
                 return Mono.error(new RuntimeException(e));
             }
@@ -105,9 +105,7 @@ public class PoliticalPartyServiceImpl implements PoliticalPartyService {
     public Mono<Void> delete(String id) {
         return partyRepository.deleteById(id);
     }
-
-    @Override
-    public Mono<Boolean> deleteFileAdherent(String path) throws IOException {
+    private Mono<Boolean> deleteFileAdherent(String path) throws IOException {
         Path result = Path.of(tempDirectory+path);
         return Mono.just(Files.deleteIfExists(result));
     }
