@@ -27,6 +27,11 @@ public class CandidateController {
     public Mono<ResponseEntity<Candidate>> findById(@PathVariable String id){
         return candidateService.findById(id).map(ResponseEntity::ok).defaultIfEmpty(ResponseEntity.notFound().build());
     }
+    @GetMapping("/voting/{id}")
+    public ResponseEntity<Flux<Candidate>> findByVotingId(@PathVariable String id){
+        Flux<Candidate> list = candidateService.findByVotingId(id);
+        return ResponseEntity.ok(list);
+    }
     @GetMapping("/party/{id}")
     public ResponseEntity<Flux<Candidate>> findByPoliticalParty(@PathVariable String id){
         Flux<Candidate> list = candidateService.findByPoliticalParty(id);

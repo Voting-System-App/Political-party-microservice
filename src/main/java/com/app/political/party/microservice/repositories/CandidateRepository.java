@@ -8,4 +8,5 @@ import reactor.core.publisher.Flux;
 @Repository
 public interface CandidateRepository extends ReactiveMongoRepository<Candidate,String> {
     Flux<Candidate> findByPoliticalParty_Id(String id);
+    Flux<Candidate> findAllByVotingId(String id);
 }
