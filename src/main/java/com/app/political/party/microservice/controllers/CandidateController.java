@@ -44,7 +44,7 @@ public class CandidateController {
     }
 
     @DeleteMapping("/{id}")
-    public Mono<ResponseEntity<Void>> delete(@PathVariable String id){
+    public Mono<ResponseEntity<String>> delete(@PathVariable String id){
         return candidateService.delete(id).map(ResponseEntity::ok).defaultIfEmpty(ResponseEntity.notFound().build());
     }
 }

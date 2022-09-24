@@ -59,7 +59,7 @@ public class CandidateServiceImpl implements CandidateService {
     }
 
     @Override
-    public Mono<Void> delete(String id) {
-        return candidateRepository.deleteById(id);
+    public Mono<String> delete(String id) {
+        return candidateRepository.deleteById(id).thenReturn("id: "+id+" eliminado");
     }
 }

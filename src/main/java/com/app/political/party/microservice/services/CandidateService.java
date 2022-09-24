@@ -10,5 +10,5 @@ public interface CandidateService {
     Mono<Candidate> findById(String id);
     Mono<Candidate> save(Candidate candidate);
     Mono<Candidate> update(Candidate candidate,String id);
-    Mono<Void> delete(String id);
+    Mono<String> delete(String id);
 }

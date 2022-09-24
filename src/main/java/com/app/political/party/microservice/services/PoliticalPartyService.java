@@ -14,5 +14,5 @@ public interface PoliticalPartyService {
     Mono<PoliticalParty> save(PoliticalParty politicalParty);
     Mono<PoliticalParty> update(PoliticalParty politicalParty,String id);
     Mono<PoliticalParty> updateAdherentStatus(String id,String path);
-    Mono<Void> delete(String id);
+    Mono<String> delete(String id);
 }

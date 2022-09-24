@@ -64,7 +64,7 @@ public class PoliticalPartyController {
         return partyService.updateAdherentStatus(id,path).map(ResponseEntity::ok).defaultIfEmpty(ResponseEntity.notFound().build());
     }
     @DeleteMapping("/{id}")
-    public Mono<ResponseEntity<Void>> delete(@PathVariable String id){
+    public Mono<ResponseEntity<String>> delete(@PathVariable String id){
         return partyService.delete(id).map(ResponseEntity::ok).defaultIfEmpty(ResponseEntity.notFound().build());
     }
 }

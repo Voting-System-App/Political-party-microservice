@@ -102,8 +102,8 @@ public class PoliticalPartyServiceImpl implements PoliticalPartyService {
     }
 
     @Override
-    public Mono<Void> delete(String id) {
-        return partyRepository.deleteById(id);
+    public Mono<String> delete(String id) {
+        return partyRepository.deleteById(id).thenReturn("id: "+id+" eliminado");
     }
     private Mono<Boolean> deleteFileAdherent(String path) throws IOException {
         Path result = Path.of(tempDirectory+path);
