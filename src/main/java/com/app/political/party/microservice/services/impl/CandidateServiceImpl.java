@@ -53,6 +53,7 @@ public class CandidateServiceImpl implements CandidateService {
                     result.setName(candidate.getName());
                     result.setLastName(candidate.getLastName());
                     result.setBirthDate(candidate.getBirthDate());
+                    result.setVotingId(candidate.getVotingId());
                     result.setPoliticalParty(candidate.getPoliticalParty());
                     return candidateRepository.save(result);
                 });

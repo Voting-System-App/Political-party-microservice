@@ -35,4 +35,5 @@ public class Candidate {
     @ManyToOne
     @JoinColumn(name="political_party_id", nullable=false)
     private PoliticalParty politicalParty;
+    private String votingId;
 }
