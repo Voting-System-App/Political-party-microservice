@@ -45,6 +45,7 @@ public class CandidateServiceImpl implements CandidateService {
     @Transactional
     public Mono<Candidate> save(Candidate candidate) {
         candidate.getPoliticalParty().setStatus(false);
+        candidate.setGender(Boolean.parseBoolean(String.valueOf(candidate.getGender())));
         return candidateRepository.save(candidate);
     }
 
@@ -55,7 +56,7 @@ public class CandidateServiceImpl implements CandidateService {
                 .flatMap(result->{
                     result.setDni(candidate.getDni());
                     result.setEmail(candidate.getEmail());
-                    result.setGender(candidate.getGender());
+                    result.setGender(Boolean.parseBoolean(String.valueOf(candidate.getGender())));
                     result.setName(candidate.getName());
                     result.setLastName(candidate.getLastName());
                     result.setBirthDate(candidate.getBirthDate());
