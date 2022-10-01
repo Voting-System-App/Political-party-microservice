@@ -58,6 +58,7 @@ public class PoliticalPartyServiceImpl implements PoliticalPartyService {
             Adherent adherent = new Adherent();
             adherent.setName(data[0]);
             adherent.setLastName(data[1]);
+            adherent.setPosition(data[2]);
             adherent.setStatus(!data[2].isEmpty());
             adherent.setPoliticalParty(party);
             adherentList.add(adherent);

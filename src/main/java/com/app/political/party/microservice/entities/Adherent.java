@@ -19,6 +19,7 @@ public class Adherent {
     @NotEmpty
     @Field(name = "last_name")
     private String lastName;
+    private String position;
     private Boolean status;
     @ManyToOne
     private PoliticalParty politicalParty;
